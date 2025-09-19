@@ -24,3 +24,6 @@ Le projet est un projet...
 
 # Installation du projet:
 git clone (mettre l'url du projet) 
+
+# Workflow git
+Branche dev et master

@@ -69,3 +69,13 @@
   background-color: #9ca3af;
   cursor: not-allowed;
 }
+
+.register-container .email-rules {
+  text-align: center;
+  color: #d9534f;
+}
+
+.register-container .password-rules {
+  text-align: center;
+  color: #d9534f;
+}

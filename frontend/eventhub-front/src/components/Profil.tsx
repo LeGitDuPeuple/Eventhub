@@ -1,44 +1,34 @@
 import { useState } from "react";
-import type{ChangeEvent} from "react";
-import type { User } from "../types/User";
+import { useSelector } from "react-redux";
+import type { AppState } from "../modules/store/store";
+import { useAppDispatch } from "../modules/store/store";
+import { updateUser } from "../modules/login/login.slice";
+import { userService } from "../service/userService";
 
 export const Profile = () => {
-  const storedUser: User | null = JSON.parse(
-    localStorage.getItem("user") || "null"
-  );
+  const user = useSelector((state: AppState) => state.login.user);
+  const dispatch = useAppDispatch();
+  const [email, setEmail] = useState(user?.email || "");
 
-  const [email, setEmail] = useState<string>(storedUser?.email || "");
-  const [message, setMessage] = useState<string>("");
+  if (!user) {
+    return <p>Utilisateur non connecté</p>;
+  }
 
   const updateProfile = (): void => {
-    if (!storedUser) return;
+    const updatedUser = { ...user, email };
 
-    const updatedUser: User = {
-      ...storedUser,
-      email
-    };
-
-    localStorage.setItem("user", JSON.stringify(updatedUser));
-    setMessage("Profil mis à jour");
+    dispatch(updateUser(updatedUser));
+    userService.save(updatedUser);
+    alert("Email modifié !");
   };
 
   return (
-    <div>
-        <h1>Event-hub</h1>
+    <div className="profile-container">
+      <h1>Event-Hub</h1>
       <h2>Profil</h2>
 
-      <input
-        value={email}
-        onChange={(e: ChangeEvent<HTMLInputElement>) =>
-          setEmail(e.target.value)
-        }
-      />
-
-      <button onClick={updateProfile}>
-        Mettre à jour
-      </button>
-
-      {message && <p>{message}</p>}
+      <input value={email} onChange={e => setEmail(e.target.value)} />
+      <button onClick={updateProfile}>Mettre à jour</button>
     </div>
   );
 };

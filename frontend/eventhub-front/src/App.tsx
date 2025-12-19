@@ -4,7 +4,7 @@ import { Login } from "./components/Login";
 import { Profile } from "./components/Profil";
 import "./styles/login.css";
 import "./styles/register.css";
-import "./styles/login.css"
+import "./styles/profil.css"
 
 
 export default function App() {

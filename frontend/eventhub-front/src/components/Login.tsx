@@ -1,24 +1,31 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useUser } from "../hooks/useUser";
+import { useAppDispatch } from "../modules/store/store";
+import { loginSuccess } from "../modules/login/login.slice";
+import { userService } from "../service/userService";
 
 export const Login = () => {
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const { login } = useUser();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const submit = (): void => {
-    const success = login(email, password);
-    if (success) {
-      navigate("/profile"); // 👈 redirection
+    const stored = userService.get();
+
+    if (stored?.email === email && stored?.password === password) {
+      dispatch(loginSuccess(stored));
+      alert("Connexion réussie");
+      navigate("/profile");
+    } else {
+      alert("Erreur de connexion");
     }
   };
 
   return (
     <div className="login-container">
-    <h1>Event-Hub</h1>
+      <h1>Event-Hub</h1>
       <h2>Connexion</h2>
 
       <input value={email} onChange={e => setEmail(e.target.value)} />
